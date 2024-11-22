@@ -1,0 +1,44 @@
+In[71]:= (* Дано *)
+\[Mu] = {0.2, 0.4, 0.6}; (* Очікувані норми прибутку *)
+\[Sigma] = {0.1, 0.18, 0.3}; (* Середньоквадратичні відхилення *)
+correlations = {{1, 1, -1}, {1, 1, -1}, {-1, -1, 1}}; (* Кореляції *)
+
+(* Коваріаційна матриця *)
+covMatrix = Outer[Times, \[Sigma], \[Sigma]] * correlations;
+
+(* Оптимізація портфеля *)
+(* Визначення ваг портфеля *)
+vars = {w1, w2, w3}; (* Ваги акцій у портфелі *)
+w = {w1, w2, w3};
+
+(* Умова: сума ваг має дорівнювати 1 *)
+constraints = {w1 + w2 + w3 == 1, w1 >= 0, w2 >= 0, w3 >= 0};
+
+(* Ризик портфеля *)
+risk = Sqrt[w.covMatrix.w];
+
+(* Очікуваний прибуток портфеля *)
+expectedReturn = \[Mu].w;
+
+(* Оптимізація: максимізація очікуваного прибутку за мінімального ризику *)
+solution = NMaximize[{expectedReturn, constraints}, vars];
+
+(* Результат: знайдені ваги та максимальний прибуток *)
+weights = vars /. solution[[2]];
+expectedPortfolioReturn = solution[[1]];
+portfolioRisk = risk /. solution[[2]];
+
+(* Вивід результатів *)
+{weights, expectedPortfolioReturn, portfolioRisk}
+
+
+
+
+
+
+
+
+Результат 
+{{0.,0.,1.},0.6,0.3} 
+
+
